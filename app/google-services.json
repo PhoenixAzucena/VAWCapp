@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1023520653014",
+    "project_id": "vawcapp-d92da",
+    "storage_bucket": "vawcapp-d92da.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023520653014:android:ff4597b78d4daeb0541377",
+        "android_client_info": {
+          "package_name": "com.example.vawcapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC437u5YjiSrxVZEOgC73XbSGuuQyAYRWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
