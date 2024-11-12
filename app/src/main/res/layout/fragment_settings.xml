@@ -8,9 +8,12 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="if (savedLocations == null) {&#xA;    savedLocations = new ArrayList&lt;>(); // Initialize with an empty list&#xA;}&#xA;tv_wayPointCounts.setText(Integer.toString(savedLocations.size()));" />
+        android:layout_width="391dp"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_labellat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:layout_width="match_parent"
