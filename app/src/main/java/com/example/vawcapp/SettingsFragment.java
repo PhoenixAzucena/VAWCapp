@@ -270,7 +270,7 @@ public class SettingsFragment extends Fragment  {
                 if (addresses != null && !addresses.isEmpty()) {
                     Address address = addresses.get(0);
                     StringBuilder addressString = new StringBuilder();
-                    for (int i = 0; i <= address.getMaxAddressLineIndex();.. i++) {
+                    for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                         addressString.append(address.getAddressLine(i)).append("\n");
                     }
                     tv_address.setText(addressString.toString());
