@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.vawcapp"
-        minSdk 34
+        minSdk 30
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -35,7 +35,7 @@ android {
     buildFeatures {
         viewBinding true
     }
-    lintOptions {
+    lint {
         warning 'deprecation'
     }
 }
