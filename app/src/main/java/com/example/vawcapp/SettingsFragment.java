@@ -262,15 +262,29 @@ public class SettingsFragment extends Fragment  {
         } else {
             tv_altitude.setText("Not Available.");
         }
-        Geocoder geocoder = new Geocoder(getContext());
 
-        try{
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(), 1);
-
-
-        }catch (Exception e){
-        tv_address.setText("Unable to get street address");
+        if (Geocoder.isPresent()) {
+            Geocoder geocoder = new Geocoder(getContext());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    StringBuilder addressString = new StringBuilder();
+                    for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+                        addressString.append(address.getAddressLine(i)).append("\n");
+                    }
+                    tv_address.setText(addressString.toString());
+                } else {
+                    tv_address.setText("Address not found");
+                }
+            } catch (Exception e) {
+                tv_address.setText("Unable to get street address");
+                Log.e("GeocoderError", e.getMessage(), e);
+            }
+        } else {
+            tv_address.setText("Geocoder not available");
         }
+
         if (savedLocations == null) {
             savedLocations = new ArrayList<>(); // Initialize with an empty list
         }
