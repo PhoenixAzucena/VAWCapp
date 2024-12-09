@@ -286,7 +286,7 @@ public class SettingsFragment extends Fragment  {
         }
 
         if (savedLocations == null) {
-            savedLocations = new ArrayList<>(); // Initialize with an empty list
+            savedLocations = new ArrayList<>();
         }
         tv_wayPointCounts.setText(Integer.toString(savedLocations.size()));
     }
