@@ -1,13 +1,22 @@
 package com.example.vawcapp;
 
+
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
+import android.Manifest;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.*;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ReportFragment#newInstance} factory method to
@@ -24,6 +33,12 @@ public class ReportFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Button b;
+    ImageButton b2;
+
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE};
+    private static final int REQUEST_PHONE_CALL = 1;
     public ReportFragment() {
         // Required empty public constructor
     }
@@ -53,12 +68,66 @@ public class ReportFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false);
+        View v = inflater.inflate(R.layout.fragment_report,container,false);
+        b2 = (ImageButton) v.findViewById(R.id.call);
+        b = v.findViewById(R.id.call2);
+
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09933579645"));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                    } else {
+                        startActivity(intent);
+                    }
+                } else {
+                    startActivity(intent);
+                }
+            }
+
+            public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+                switch (requestCode) {
+                    case REQUEST_PHONE_CALL:
+                        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09933579645"));
+                            startActivity(intent);
+                        }
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + requestCode);
+                }
+            }
+            public boolean hasPermissions(Context context, String... permissions) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+                    for (String permission : permissions) {
+                        if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:09933579645"));
+                startActivity(callIntent);
+            }
+        });
+
+
+        return v;
     }
 }
