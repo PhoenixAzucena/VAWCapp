@@ -83,6 +83,23 @@
             app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/call" />
+
+        <Button
+            android:id="@+id/message"
+            android:layout_width="150sp"
+            android:layout_height="70sp"
+            android:layout_marginStart="149dp"
+            android:layout_marginTop="152dp"
+            android:layout_marginEnd="159dp"
+            android:backgroundTint="@color/redBright"
+            android:text="Message"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/call" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
