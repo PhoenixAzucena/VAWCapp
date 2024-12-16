@@ -84,7 +84,7 @@ public class ReportFragment extends Fragment {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09777449692"));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09933579645"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
@@ -99,10 +99,10 @@ public class ReportFragment extends Fragment {
             public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
                 switch (requestCode) {
                     case REQUEST_PHONE_CALL:
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09777449692"));
-                        startActivity(intent);
-                    }
+                        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "09933579645"));
+                            startActivity(intent);
+                        }
                     default:
                         throw new IllegalStateException("Unexpected value: " + requestCode);
                 }
@@ -122,7 +122,7 @@ public class ReportFragment extends Fragment {
             @Override
             public void onClick(View v){
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:09777449692"));
+                callIntent.setData(Uri.parse("tel:09933579645"));
                 startActivity(callIntent);
             }
         });

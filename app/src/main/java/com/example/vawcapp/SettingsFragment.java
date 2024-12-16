@@ -111,10 +111,7 @@ public class SettingsFragment extends Fragment  {
         sw_locationupdates = v.findViewById(R.id.sw_locationsupdates);
         sw_gps = v.findViewById(R.id.sw_gps);
         locationRequest = new LocationRequest();
-        btn_newWaypoint = v.findViewById(R.id.btn_newWayPoint);
-        btn_showWayPointList = v.findViewById(R.id.btn_showWayPointList);
-        btn_showMap = v.findViewById(R.id.btn_showmap);
-        tv_wayPointCounts = v.findViewById(R.id.tv_countOfCrumbs);
+       
         locationRequest.setInterval(1000 * DEFAULT_UPDATE_INTERVAL);
         locationRequest.setFastestInterval(1000 * FAST_UPDATE_INT);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -229,23 +226,36 @@ public class SettingsFragment extends Fragment  {
         }
 
     }
-    private void updateGPS(){
-        //get perms from user to track GPS
-
+    private void updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)==
-        PackageManager.PERMISSION_GRANTED){
-    fusedLocationProviderClient.getLastLocation().addOnSuccessListener( new OnSuccessListener<Location>() {
-        @Override
-        public void onSuccess(Location location) {
-            updateUIValues(location);
-            currentLocation = location;
-        }
-    });
-        }
-        else {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (isAdded()) { // Check if the fragment is currently added to its activity
+                        updateUIValues(location);
+                        currentLocation = location;
+                    } else if (location == null) {
+                        Toast.makeText(requireContext(), "Unable to get last location", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
         }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (sw_locationupdates.isChecked()) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopLocationUpdates();
     }
 
     private void updateUIValues(Location location) {
@@ -264,9 +274,10 @@ public class SettingsFragment extends Fragment  {
         }
 
         if (Geocoder.isPresent()) {
-            Geocoder geocoder = new Geocoder(getContext());
+            Geocoder geocoder = new Geocoder(requireContext());
             try {
                 List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
                 if (addresses != null && !addresses.isEmpty()) {
                     Address address = addresses.get(0);
                     StringBuilder addressString = new StringBuilder();
