@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.Manifest;
 
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,32 +128,10 @@ public class SettingsFragment extends Fragment  {
                 updateUIValues(locationResult.getLastLocation());
             }
         } ;
-        btn_newWaypoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //get the gps location
 
-                //add the new location
-               ILSApplication globalListClass = (ILSApplication) requireActivity().getApplication();
-               savedLocations = globalListClass.getMyLocations();
-               savedLocations.add(currentLocation);
 
-            }
-        });
 
-        btn_showWayPointList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ShowSavedLocationsList.class);
-                startActivity(intent);
-            }
-        });
-        btn_showMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
         sw_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,28 +187,40 @@ public class SettingsFragment extends Fragment  {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[]
-            ,int[] grantResults){
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case PERMISSIONS_FINE_LOCATION:
-                try {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    updateGPS();
-                }
 
-        } catch (SecurityException e){
-                    Toast.makeText(getContext(), "This app requires permission to be granted in order to access your location.", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+        switch (requestCode) {
+            case PERMISSIONS_FINE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, update GPS
+                    updateGPS();
+                } else {
+                    // Permission denied
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        // User selected "Don't ask again"
+                        Toast.makeText(getContext(), "Please enable location permission in app settings.", Toast.LENGTH_LONG).show();
+                        // Optionally, you can open the app settings
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getContext(), "Permission denied. Unable to access location.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
         }
-
     }
     private void updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        // Check if the permission is granted
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted, get the last location
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -241,7 +233,16 @@ public class SettingsFragment extends Fragment  {
                 }
             });
         } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            // Check if we should show an explanation
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user asynchronously
+                Toast.makeText(getContext(), "Location permission is needed to show your location.", Toast.LENGTH_LONG).show();
+                // After showing the explanation, request the permission
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            } else {
+                // No explanation needed; request the permission
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            }
         }
     }
     @Override
@@ -290,16 +291,17 @@ public class SettingsFragment extends Fragment  {
                 }
             } catch (Exception e) {
                 tv_address.setText("Unable to get street address");
-                Log.e("GeocoderError", e.getMessage(), e);
+                Log.e("GeocoderError", "Error retrieving address: " + e.getMessage(), e);
             }
         } else {
             tv_address.setText("Geocoder not available");
         }
 
+
         if (savedLocations == null) {
             savedLocations = new ArrayList<>(); // Initialize with an empty list
         }
-        tv_wayPointCounts.setText(Integer.toString(savedLocations.size()));
+
     }
 
 
