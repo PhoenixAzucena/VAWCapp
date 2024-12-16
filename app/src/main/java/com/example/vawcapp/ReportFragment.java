@@ -36,6 +36,7 @@ public class ReportFragment extends Fragment {
     Button b;
     ImageButton b2;
 
+    Button b3;
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE};
     private static final int REQUEST_PHONE_CALL = 1;
@@ -78,7 +79,15 @@ public class ReportFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_report,container,false);
         b2 = (ImageButton) v.findViewById(R.id.call);
         b = v.findViewById(R.id.call2);
+        b3 = v.findViewById(R.id.message);
 
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), MessageActivity.class);
+                startActivity(intent);
+            }
+        });
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

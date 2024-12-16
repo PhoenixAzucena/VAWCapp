@@ -8,17 +8,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up - Step 2"
+        android:text="Login"
         android:textSize="24sp"
         android:layout_gravity="center"
         android:paddingBottom="24dp"/>
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
+        android:hint="Username"
+        android:inputType="text"
         android:minHeight="48dp" />
 
     <EditText
@@ -29,24 +29,22 @@
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/confirm_password"
+    <Button
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:text="Login"
+        android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/signup_button"
+        android:id="@+id/SignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:layout_marginTop="16dp"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back"/>
+        android:clickable="true"
+        android:focusable="true" />
 
 </LinearLayout>
