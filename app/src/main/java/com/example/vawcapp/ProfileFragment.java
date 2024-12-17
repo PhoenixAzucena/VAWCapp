@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -69,6 +71,7 @@ public class ProfileFragment extends Fragment {
         TextView addressTextView = view.findViewById(R.id.address);
         TextView birthDateTextView = view.findViewById(R.id.birth_date);
         TextView emailTextView = view.findViewById(R.id.email);
+        Button logoutButton = view.findViewById(R.id.logout_button); // Find the logout button
 
         // Set the user information to the TextViews with labels
         usernameTextView.setText("Name: " + userName);
@@ -77,6 +80,17 @@ public class ProfileFragment extends Fragment {
         addressTextView.setText("Address: " + userAddress);
         birthDateTextView.setText("Birth Date: " + userBirthDate);
         emailTextView.setText("Email: " + userEmail);
+
+        // Set up the logout button click listener
+        logoutButton.setOnClickListener(v -> {
+            // Handle logout logic
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.setCurrentUserId(null); // Clear the current user ID
+                mainActivity.replaceFragment(new Login()); // Replace with Login fragment
+                Toast.makeText(getActivity(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

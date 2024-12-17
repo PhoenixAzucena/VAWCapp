@@ -9,9 +9,9 @@
     android:iconTint="@color/redBright"
     android:id="@+id/profile"
     />
-<item android:title="Settings"
-      android:icon="@drawable/baseline_settings_24"
-    android:id="@+id/settings"
+<item android:title="Locations"
+      android:icon="@drawable/baseline_location_on_24"
+    android:id="@+id/locations"
       />
     
 </menu>

@@ -14,11 +14,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.vawcapp.databinding.ActivityMainBinding;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     ImageButton imageButton;
@@ -36,14 +33,8 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance("https://vawcapp-d92da-default-rtdb.firebaseio.com/").getReference("users");
 
-        // Check if user is logged in and fetch user data
-        String userEmail = getIntent().getStringExtra("USER_EMAIL");
-        if (userEmail != null) {
-            fetchUserId(userEmail);
-        } else {
-            // Show LoginFragment if no user email is provided
-            replaceFragment(new Login());
-        }
+        // Show LoginFragment initially
+        replaceFragment(new ReportFragment()); // Show Login fragment initially
 
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -52,64 +43,39 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.profile:
                     if (isUserLoggedIn()) {
-                    // Pass user data to ProfileFragment
-                    String userName = getIntent().getStringExtra("USER_NAME");
-                    String userAge = getIntent().getStringExtra("USER_AGE");
-                    String userGender = getIntent().getStringExtra("USER_GENDER");
-                    String userAddress = getIntent().getStringExtra("USER_ADDRESS");
-                    String userBirthDate = getIntent().getStringExtra("USER_BIRTH_DATE");
-
-                    ProfileFragment profileFragment = newInstance(userName, userAge, userGender, userAddress, userBirthDate, userEmail, currentUserId);
-                    replaceFragment(profileFragment);
+                    loadProfileFragment();
                 } else {
                     // Show LoginFragment if user is not logged in
                     replaceFragment(new Login());
                 }
                 break;
-                case R.id.settings:
-                    replaceFragment(new SettingsFragment());
+                case R.id.locations:
+                    replaceFragment(new LocationsFragment());
                     break;
             }
             return true;
         });
     }
 
-    private void fetchUserId(String email) {
-        databaseReference.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        currentUserId = userSnapshot.getKey(); // Get the user ID (key)
-                        // Optionally, you can also retrieve other user data here
-                        // e.g., String name = userSnapshot.child("name").getValue(String.class);
-                    }
-                    // User ID fetched successfully, you can now proceed to load the profile
-                    loadProfileFragment(); // Load the profile or any other fragment
-                } else {
-                    Toast.makeText(MainActivity.this, "User  not found", Toast.LENGTH_SHORT).show();
-                    replaceFragment(new Login()); // Show login if user not found
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void loadProfileFragment() {
         // Load the profile fragment after fetching the user ID
         if (isUserLoggedIn()) {
-            String userName = getIntent().getStringExtra("USER_NAME");
-            String userAge = getIntent().getStringExtra("USER_AGE");
-            String userGender = getIntent().getStringExtra("USER_GENDER");
-            String userAddress = getIntent().getStringExtra("USER_ADDRESS");
-            String userBirthDate = getIntent().getStringExtra("USER_BIRTH_DATE");
+            // Fetch user data from the database using currentUser Id
+            databaseReference.child(currentUserId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    String userName = task.getResult().child("name").getValue(String.class);
+                    String userAge = task.getResult().child("age").getValue(String.class);
+                    String userGender = task.getResult().child("gender").getValue(String.class);
+                    String userAddress = task.getResult().child("address").getValue(String.class);
+                    String userBirthDate = task.getResult().child("birth_date").getValue(String.class);
+                    String userEmail = task.getResult().child("email").getValue(String.class);
 
-            ProfileFragment profileFragment = newInstance(userName, userAge, userGender, userAddress, userBirthDate, getIntent().getStringExtra("USER_EMAIL"), currentUserId);
-            replaceFragment(profileFragment);
+                    ProfileFragment profileFragment = newInstance(userName, userAge, userGender, userAddress, userBirthDate, userEmail, currentUserId);
+                    replaceFragment(profileFragment);
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -118,15 +84,21 @@ public class MainActivity extends AppCompatActivity {
         return currentUserId != null;
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.addToBackStack(null); // Optional: Add to back stack for navigation
         fragmentTransaction.commit();
     }
 
     // Method to set the current user ID after successful login
     public void setCurrentUserId(String userId) {
         this.currentUserId = userId;
+    }
+
+    // Method to clear the current user ID for logout
+    public void clearCurrentUserId() {
+        this.currentUserId = null;
     }
 }

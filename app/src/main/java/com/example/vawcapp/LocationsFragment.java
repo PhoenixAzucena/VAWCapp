@@ -39,10 +39,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
+ * Use the {@link LocationsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment  {
+public class LocationsFragment extends Fragment  {
 
     public static final int DEFAULT_UPDATE_INTERVAL = 30;
     public static final int FAST_UPDATE_INT = 5;
@@ -65,7 +65,7 @@ public class SettingsFragment extends Fragment  {
     FusedLocationProviderClient fusedLocationProviderClient;
     Location currentLocation;
     List<Location> savedLocations;
-    public SettingsFragment() {
+    public LocationsFragment() {
         // Required empty public constructor
     }
 
@@ -75,11 +75,11 @@ public class SettingsFragment extends Fragment  {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
+     * @return A new instance of fragment LocationsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
+    public static LocationsFragment newInstance(String param1, String param2) {
+        LocationsFragment fragment = new LocationsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
