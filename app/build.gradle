@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+
     implementation libs.recyclerview
     implementation libs.fragment
     implementation libs.appcompat
