@@ -32,6 +32,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +92,7 @@ public class LocationsFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseReference = FirebaseDatabase.getInstance("https://vawcapp-d92da-default-rtdb.firebaseio.com/").getReference("locations");
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -117,7 +120,18 @@ public class LocationsFragment extends Fragment  {
         locationRequest.setInterval(1000 * DEFAULT_UPDATE_INTERVAL);
         locationRequest.setFastestInterval(1000 * FAST_UPDATE_INT);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        btn_saveLocation = v.findViewById(R.id.btn_saveLocation); // Make sure to add this button in your XML layout
 
+        btn_saveLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentLocation != null) {
+                    saveLocationToDatabase(currentLocation);
+                } else {
+                    Toast.makeText(getContext(), "Current location is not available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         locationCallBack = new LocationCallback(){
 
             @Override
@@ -304,5 +318,48 @@ public class LocationsFragment extends Fragment  {
 
     }
 
+    private DatabaseReference databaseReference; // Firebase Database reference
+    private Button btn_saveLocation; // Button to save location
 
+
+        // Initialize Firebase Database reference
+
+
+
+
+
+
+    private void saveLocationToDatabase(Location location) {
+        String key = databaseReference.push().getKey(); // Create a unique key for the location
+        if (key != null) {
+            String address = getAddressFromLocation(location);
+            LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude(), address);
+            databaseReference.child(key).setValue(locationData)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Location saved successfully", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to save location", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private String getAddressFromLocation(Location location) {
+        String address = "Address not found";
+        if (Geocoder.isPresent()) {
+            Geocoder geocoder = new Geocoder(requireContext());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address addr = addresses.get(0);
+                    StringBuilder addressString = new StringBuilder();
+                    for (int i = 0; i <= addr.getMaxAddressLineIndex(); i++) {
+                        addressString.append(addr.getAddressLine(i)).append("\n");
+                    }
+                    address = addressString.toString();
+                }
+            } catch (Exception e) {
+                Log.e("GeocoderError", "Error retrieving address: " + e.getMessage(), e);
+            }
+        }
+        return address;
+    }
+
+    // Other methods...
 }

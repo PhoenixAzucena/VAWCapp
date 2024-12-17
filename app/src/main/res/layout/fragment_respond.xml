@@ -22,7 +22,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report"
+            android:text="Respond"
             android:textColor="@color/white"
             android:paddingBottom="20dp"
             android:paddingTop="10dp"
@@ -46,26 +46,26 @@
 
         <ImageButton
             android:id="@+id/call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="155dp"
+            android:layout_height="157dp"
             android:layout_marginTop="80dp"
-            android:background="@drawable/bgreportnow"
+            android:background="@drawable/circle"
             android:contentDescription="@string/app_name"
             android:scaleType="centerInside"
 
-            android:src="@drawable/megaphone__5_"
-            app:layout_constraintBottom_toTopOf="@+id/call2"
+
+            app:layout_constraintBottom_toTopOf="@+id/respond"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/call2"
+            android:id="@+id/respond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/redBright"
-            android:text="Report"
+            android:text="Respond"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,17 +81,6 @@
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/call2" />
-
-        <Button
-            android:id="@+id/btn_sendLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Send Location"
-            android:backgroundTint="@color/redBright"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message" />
+            app:layout_constraintTop_toBottomOf="@+id/respond" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

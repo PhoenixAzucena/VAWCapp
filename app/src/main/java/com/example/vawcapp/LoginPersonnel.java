@@ -21,6 +21,7 @@ public class LoginPersonnel extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextPassword;
     private Button buttonLogin;
+    public Button back;
     private DatabaseReference databaseReference;
 
     @Override
@@ -35,6 +36,7 @@ public class LoginPersonnel extends AppCompatActivity {
         editTextName = findViewById(R.id.editTextName);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
+        back = findViewById(R.id.backButton2);
 
         // Set up the login button click listener
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,12 @@ public class LoginPersonnel extends AppCompatActivity {
                     // Check credentials in Firebase
                     checkCredentials(name, password);
                 }
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

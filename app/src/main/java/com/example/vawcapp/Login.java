@@ -25,6 +25,7 @@ public class Login extends Fragment {
     private Button loginButton;
     private TextView signupPrompt;
     private DatabaseReference databaseReference;
+    public Button continueAsVAWC;
 
     public Login() {
         // Required empty public constructor
@@ -39,6 +40,7 @@ public class Login extends Fragment {
         password = view.findViewById(R.id.password);
         loginButton = view.findViewById(R.id.login_button);
         signupPrompt = view.findViewById(R.id.SignUp);
+        continueAsVAWC = view.findViewById(R.id.ContinueAsPersonnel);
 
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance("https://vawcapp-d92da-default-rtdb.firebaseio.com/").getReference("users");
@@ -61,7 +63,13 @@ public class Login extends Fragment {
             Intent intent = new Intent(getActivity(), SignUpActivity.class);
             startActivity(intent);
         });
-
+        continueAsVAWC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), LoginPersonnel.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
