@@ -1,8 +1,5 @@
 package com.example.vawcapp;
 
-
-
-
 public class Message {
     private String sender;
     private String text;

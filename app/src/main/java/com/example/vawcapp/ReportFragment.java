@@ -53,6 +53,12 @@ public class ReportFragment extends Fragment {
      * @return A new instance of fragment ReportFragment.
      */
     // TODO: Rename and change types and number of parameters
+    private String userId;
+    private String userName;
+    public void setUserInfo(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
     public static ReportFragment newInstance(String param1, String param2) {
         ReportFragment fragment = new ReportFragment();
         Bundle args = new Bundle();
@@ -85,7 +91,15 @@ public class ReportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(requireContext(), MessageActivity.class);
-                startActivity(intent);
+
+                intent.putExtra("ARG_USER_ID", userId); // Pass the user ID
+                intent.putExtra("ARG_USER_NAME", userName); // Pass the user's name
+                startActivity(intent);  ReportFragment reportFragment = new ReportFragment();
+                reportFragment.setUserInfo(userName, userName); // Pass user ID and name
+                assert getActivity() != null;
+                ((MainActivity) getActivity()).replaceFragment(reportFragment);
+
+
             }
         });
         b.setOnClickListener(new View.OnClickListener() {

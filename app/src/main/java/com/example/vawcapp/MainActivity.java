@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.profile:
                     if (isUserLoggedIn()) {
+                    onLoginSuccess(currentUserId);
                     loadProfileFragment();
                 } else {
                     // Show LoginFragment if user is not logged in
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             databaseReference.child(currentUserId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult() != null) {
                     String userName = task.getResult().child("name").getValue(String.class);
+
                     String userAge = task.getResult().child("age").getValue(String.class);
                     String userGender = task.getResult().child("gender").getValue(String.class);
                     String userAddress = task.getResult().child("address").getValue(String.class);
@@ -100,5 +102,10 @@ public class MainActivity extends AppCompatActivity {
     // Method to clear the current user ID for logout
     public void clearCurrentUserId() {
         this.currentUserId = null;
+    }
+    public void onLoginSuccess(String userId) {
+        setCurrentUserId(userId);
+
+        // Navigate to the main activity or load the profile fragment
     }
 }
