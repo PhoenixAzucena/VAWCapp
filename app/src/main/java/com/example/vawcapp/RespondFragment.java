@@ -1,5 +1,6 @@
 package com.example.vawcapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +21,21 @@ public class RespondFragment extends Fragment {
     public RespondFragment() {
         // Required empty public constructor
     }
-
+private Button message;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_respond, container, false);
         respondButton = v.findViewById(R.id.respond);
+        message = v.findViewById(R.id.messageButton);
 
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), MessageActivity.class);
+                startActivity(intent);
+            }
+        });
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("notifications");
 
