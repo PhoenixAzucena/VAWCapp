@@ -8,22 +8,28 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
 
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical" />
 
     <EditText
         android:id="@+id/editTextMessage"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
 
-        android:hint="Type your message here" />
+        android:hint="Type your message here"
+        android:padding="8dp" />
 
     <Button
         android:id="@+id/buttonSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send" />
-
+ <Button
+     android:id="@+id/BackButton"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="Back"
+     />
 </LinearLayout>

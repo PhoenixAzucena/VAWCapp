@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Respond"
+        android:icon="@drawable/baseline_report_problem_24"
+        android:id="@+id/report"
+        />
+    <item android:title="Profile"
+        android:icon="@drawable/baseline_person_24"
+        android:iconTint="@color/redBright"
+        android:id="@+id/profile"
+        />
+    <item android:title="Locations"
+        android:icon="@drawable/baseline_location_on_24"
+        android:id="@+id/locations"
+        />
+
+</menu>
