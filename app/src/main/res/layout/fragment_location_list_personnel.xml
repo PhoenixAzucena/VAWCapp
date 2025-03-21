@@ -10,11 +10,13 @@
 
     <TextView
         android:id="@+id/tv_latitude"
-        android:layout_width="234dp"
-        android:layout_height="69dp"
+        android:layout_width="250dp"
+        android:layout_height="87dp"
         android:layout_marginStart="45dp"
         android:layout_marginTop="114dp"
         android:layout_marginEnd="132dp"
+        android:textSize="20dp"
+        android:text="Phoenix's Location: Unnamed Road, Mountain View, CA 94043, USA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +62,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="213dp"
             android:layout_marginBottom="16dp"
-            android:text="Locations list"
+            android:text="Locations List"
             android:textColor="@color/white"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
